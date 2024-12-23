@@ -3,12 +3,12 @@ export interface Student {
   id: number;
   name:string;
   dni:string;
-  rol:string;
 }
 
 export interface Course {
   id: number;
   name: string;
+  rol: string;
   link: string;
   code: string;
   aim:string;

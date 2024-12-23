@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Modal } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Modal, ScrollView } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons'; // For icons
 import apiClient from '@/api/apiClient'; // Make sure apiClient is correctly configured
 import { Student, Course } from '@/api/models';
@@ -40,7 +40,7 @@ const SearchStudentScreen = ({ navigation }: any) => {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.innerContainer}>
         {/* Screen Title */}
         <Text style={styles.title}>Search Certificate</Text>
@@ -67,9 +67,8 @@ const SearchStudentScreen = ({ navigation }: any) => {
         {studentData && (
           <View style={styles.resultBox}>
             <View style={styles.studentBox}>
-              <Text style={styles.header}>Student: {studentData.student.name}</Text>
+              <Text style={styles.header}>Nombres: {studentData.student.name}</Text>
               <Text>DNI: {studentData.student.dni}</Text>
-              <Text>Role: {studentData.student.rol}</Text>
             </View>
 
             <View style={styles.coursesContainer}>
@@ -101,10 +100,14 @@ const SearchStudentScreen = ({ navigation }: any) => {
                 <>
                   <Text style={styles.modalText}>Student: {studentData.student.name}</Text>
                   <Text style={styles.modalText}>DNI: {studentData.student.dni}</Text>
+                  <Text style={styles.modalText}>Rol: {selectedCourse.rol}</Text>
                   <Text style={styles.modalText}>Course: {selectedCourse.name}</Text>
                   <Text style={styles.modalText}>Code: {selectedCourse.code}</Text>
                   <Text style={styles.modalText}>Objective: {selectedCourse.aim}</Text>
-                  <Text style={styles.modalText}>Content: {selectedCourse.contents}</Text>
+                  <Text style={styles.modalText}>Content:</Text>
+                  {selectedCourse.contents.split(', ').map((item, index) => (
+                    <Text key={index} style={styles.listItem}>• {item.trim()}</Text>
+                  ))}
                 </>
               )}
               <TouchableOpacity onPress={handleCloseModal} style={styles.closeButton}>
@@ -114,19 +117,16 @@ const SearchStudentScreen = ({ navigation }: any) => {
           </View>
         </Modal>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
     backgroundColor: '#f5f5f5', // Light background
   },
   innerContainer: {
-    width: '100%',
     padding: 20,
     alignItems: 'center',
   },
@@ -222,6 +222,11 @@ const styles = StyleSheet.create({
   modalText: {
     fontSize: 16,
     marginBottom: 8,
+  },
+  listItem: {
+    fontSize: 16,
+    marginBottom: 5,
+    marginLeft: 10, // Slight indentation for the bullets
   },
   closeButton: {
     marginTop: 20,
